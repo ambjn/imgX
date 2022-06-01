@@ -27,6 +27,18 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
     });
   }
 
+  increaseFontSize() {
+    setState(() {
+      texts[currentIndex].fontSize = texts[currentIndex].fontSize + 2;
+    });
+  }
+
+  decreaseFontSize() {
+    setState(() {
+      texts[currentIndex].fontSize = texts[currentIndex].fontSize - 2;
+    });
+  }
+
   addNewText(context) {
     setState(() {
       texts.add(TextModel(
