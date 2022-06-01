@@ -15,6 +15,7 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
   List<TextModel> texts = [];
 
   int currentIndex = 0;
+  //save image
   saveToGallery(context) {
     if (texts.isNotEmpty) {
       screenshotController.capture().then((Uint8List? image) {
@@ -28,6 +29,7 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
     }
   }
 
+// save image with this format
   saveImage(Uint8List bytes) async {
     final time = DateTime.now()
         .toIso8601String()
@@ -129,6 +131,7 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
   }
 
   addNewText(context) {
+    // display on screen after text is typed from dialog box
     setState(() {
       texts.add(TextModel(
           text: textEditingController.text,
@@ -162,7 +165,7 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                      icon: const Icon(Icons.arrow_back_ios_rounded),
                     ),
                     DefaultButton(
                         onPressed: () => addNewText(context),
