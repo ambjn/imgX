@@ -1,3 +1,6 @@
+// when we save it, whike getting image from gallery
+// dragging, bolding on own
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imgx/screens/edit_image_screen.dart';
@@ -12,13 +15,14 @@ class HomeScreen extends StatelessWidget {
           child: IconButton(
         icon: const Icon(Icons.upload_file),
         onPressed: () async {
-          XFile? file = await ImagePicker().pickImage(
+          final ImagePicker _picker = ImagePicker();
+          XFile? image = await _picker.pickImage(
             source: ImageSource.gallery,
           );
-          if (file != null) {
+          if (image != null) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    EditImageScreen(selectedImage: file.path)));
+                    EditImageScreen(selectedImage: image.path)));
           }
         },
       )),
