@@ -4,6 +4,10 @@ import 'package:imgx/widgets/default_button.dart';
 
 abstract class EditImageViewModel extends State<EditImageScreen> {
   TextEditingController textEditingController = TextEditingController();
+  List<String> addNewText(context) {
+    setState(() {});
+  }
+
   addNewDialog(context) {
     showDialog(
         context: context,
