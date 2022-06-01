@@ -23,50 +23,55 @@ class _EditImageScreenState extends EditImageViewModel {
         child: SafeArea(
             child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.3,
-          child: Stack(children: [
-            _selectedImage,
-            for (int i = 0; i < texts.length; i++)
-              Positioned(
-                  left: texts[i].left,
-                  top: texts[i].top,
-                  child: GestureDetector(
-                    onLongPress: (() {
-                      setState(() {
-                        currentIndex = i;
-                        removeText(context);
-                      });
-                    }),
-                    onTap: () => setCurrentIndex(context, i),
-                    child: Draggable(
-                      feedback: ImageText(textInfo: texts[i]),
-                      child: ImageText(textInfo: texts[i]),
-                      onDragEnd: (drag) {
-                        final rendexBox =
-                            context.findRenderObject() as RenderBox;
-                        Offset off = rendexBox.globalToLocal(drag.offset);
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Stack(children: [
+              _selectedImage,
+              for (int i = 0; i < texts.length; i++)
+                Positioned(
+                    left: texts[i].left,
+                    top: texts[i].top,
+                    child: GestureDetector(
+                      onLongPress: (() {
                         setState(() {
-                          texts[i].top = off.dy - 96; //to improve drag and drop
-                          texts[i].left = off.dx;
+                          currentIndex = i;
+                          removeText(context);
                         });
-                      },
-                    ),
-                  )),
-            creatorText.text.isNotEmpty
-                ? Positioned(
-                    left: 0,
-                    bottom: 0,
-                    child: Text(
-                      creatorText.text,
-                      style: TextStyle(
-                          color: Colors.black.withOpacity(0.3),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : const SizedBox.shrink()
-          ]),
+                      }),
+                      onTap: () => setCurrentIndex(context, i),
+                      child: Draggable(
+                        feedback: ImageText(textInfo: texts[i]),
+                        child: ImageText(textInfo: texts[i]),
+                        onDragEnd: (drag) {
+                          final rendexBox =
+                              context.findRenderObject() as RenderBox;
+                          Offset off = rendexBox.globalToLocal(drag.offset);
+                          setState(() {
+                            texts[i].top =
+                                off.dy - 96; //to improve drag and drop
+                            texts[i].left = off.dx;
+                          });
+                        },
+                      ),
+                    )),
+              creatorText.text.isNotEmpty
+                  ? Positioned(
+                      left: 0,
+                      bottom: 0,
+                      child: Text(
+                        creatorText.text,
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.3),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : const SizedBox.shrink()
+            ]),
+          ),
         )),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _addnewTextFab,
     );
   }
@@ -75,17 +80,21 @@ class _EditImageScreenState extends EditImageViewModel {
       child: Image.file(File(widget.selectedImage),
           fit: BoxFit.fill, width: MediaQuery.of(context).size.width));
 
-  Widget get _addnewTextFab => FloatingActionButton(
-        onPressed: () => addNewDialog(context),
-        backgroundColor: Colors.white,
-        tooltip: 'add new text',
-        child: const Icon(
-          Icons.edit,
-          color: Colors.black,
+  Widget get _addnewTextFab => Padding(
+        padding: const EdgeInsets.only(bottom: 150.0),
+        child: FloatingActionButton(
+          onPressed: () => addNewDialog(context),
+          backgroundColor: Colors.white,
+          tooltip: 'add new text',
+          child: const Icon(
+            Icons.edit,
+            color: Colors.black,
+          ),
         ),
       );
 
   AppBar get _appBar => AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: SizedBox(
@@ -165,6 +174,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 ),
                 tooltip: 'add new line',
               ),
+              // for colors
               Tooltip(
                 message: 'red',
                 child: GestureDetector(
@@ -189,6 +199,7 @@ class _EditImageScreenState extends EditImageViewModel {
               const SizedBox(
                 width: 5,
               ),
+
               Tooltip(
                 message: 'black',
                 child: GestureDetector(

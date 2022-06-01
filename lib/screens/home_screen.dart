@@ -47,6 +47,7 @@ class HomeScreen extends StatelessWidget {
               size: 30,
             ),
             onPressed: () async {
+              // image_picker func
               final ImagePicker _picker = ImagePicker();
               XFile? image = await _picker.pickImage(
                 source: ImageSource.gallery,
