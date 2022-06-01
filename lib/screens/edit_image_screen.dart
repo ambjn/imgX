@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:imgx/widgets/edit_image_view_model.dart';
+import 'package:imgx/widgets/image_text.dart';
 
 class EditImageScreen extends StatefulWidget {
   const EditImageScreen({Key? key, required this.selectedImage})
@@ -15,10 +16,58 @@ class _EditImageScreenState extends EditImageViewModel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Image.file(File(widget.selectedImage)),
+      appBar: _appBar,
+      body: SafeArea(
+          child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.3,
+        child: Stack(children: [
+          _selectedImage,
+          for (int i = 0; i < texts.length; i++)
+            Positioned(
+                left: texts[i].left,
+                top: texts[i].top,
+                child: GestureDetector(
+                  onLongPress: (() {
+                    print('long press');
+                  }),
+                  onTap: () {
+                    print('single press');
+                  },
+                  child: Draggable(
+                    feedback: ImageText(textInfo: texts[i]),
+                    child: ImageText(textInfo: texts[i]),
+                    onDragEnd: (drag) {
+                      final rendexBox = context.findRenderObject() as RenderBox;
+                      Offset off = rendexBox.globalToLocal(drag.offset);
+                      setState(() {
+                        texts[i].top = off.dy - 96; //to improve drag and drop
+                        texts[i].left = off.dx;
+                      });
+                    },
+                  ),
+                )),
+          creatorText.text.isNotEmpty
+              ? Positioned(
+                  left: 0,
+                  bottom: 0,
+                  child: Text(
+                    creatorText.text,
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.3),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              : const SizedBox.shrink()
+        ]),
+      )),
       floatingActionButton: _addnewTextFab,
     );
   }
+
+  Widget get _selectedImage => Center(
+      child: Image.file(File(widget.selectedImage),
+          fit: BoxFit.fill, width: MediaQuery.of(context).size.width));
 
   Widget get _addnewTextFab => FloatingActionButton(
         onPressed: () => addNewDialog(context),
@@ -27,6 +76,187 @@ class _EditImageScreenState extends EditImageViewModel {
         child: const Icon(
           Icons.edit,
           color: Colors.black,
+        ),
+      );
+
+  AppBar get _appBar => AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        title: SizedBox(
+          height: 50,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.save,
+                  color: Colors.black,
+                ),
+                tooltip: 'save image',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ),
+                tooltip: 'increase font size',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.remove,
+                  color: Colors.black,
+                ),
+                tooltip: 'decrease font size',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.format_align_left,
+                  color: Colors.black,
+                ),
+                tooltip: 'align left',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.format_align_center,
+                  color: Colors.black,
+                ),
+                tooltip: 'align center',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.format_align_right,
+                  color: Colors.black,
+                ),
+                tooltip: 'align right',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.format_bold,
+                  color: Colors.black,
+                ),
+                tooltip: 'bold',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.format_italic,
+                  color: Colors.black,
+                ),
+                tooltip: 'italic',
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.space_bar,
+                  color: Colors.black,
+                ),
+                tooltip: 'add new line',
+              ),
+              Tooltip(
+                message: 'red',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'white',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'black',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'blue',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'yellow',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.yellow,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'green',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.green,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'orange',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.orange,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Tooltip(
+                message: 'pink',
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.pink,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+            ],
+          ),
         ),
       );
 }

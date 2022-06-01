@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:imgx/models/text_model.dart';
 import 'package:imgx/screens/edit_image_screen.dart';
 import 'package:imgx/widgets/default_button.dart';
 
 abstract class EditImageViewModel extends State<EditImageScreen> {
   TextEditingController textEditingController = TextEditingController();
-  List<String> addNewText(context) {
-    setState(() {});
+  TextEditingController creatorText = TextEditingController();
+
+  List<TextModel> texts = [];
+  addNewText(context) {
+    setState(() {
+      texts.add(TextModel(
+          text: textEditingController.text,
+          left: 0,
+          top: 0,
+          color: Colors.black,
+          fontWeight: FontWeight.normal,
+          fontStyle: FontStyle.normal,
+          fontSize: 20,
+          textAlign: TextAlign.left));
+      Navigator.of(context).pop();
+    });
   }
 
   addNewDialog(context) {
@@ -30,7 +45,7 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
                       icon: const Icon(Icons.arrow_back_ios_new_outlined),
                     ),
                     DefaultButton(
-                        onPressed: () {},
+                        onPressed: () => addNewText(context),
                         color: Colors.red,
                         textColor: Colors.black,
                         child: const Text("add text"))
