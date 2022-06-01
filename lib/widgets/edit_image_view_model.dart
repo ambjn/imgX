@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imgx/screens/edit_image_screen.dart';
+import 'package:imgx/widgets/default_button.dart';
 
 abstract class EditImageViewModel extends State<EditImageScreen> {
   TextEditingController textEditingController = TextEditingController();
@@ -16,7 +17,22 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
                     filled: true,
                     hintText: 'your text goes here..'),
               ),
-              actions: [],
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                    ),
+                    DefaultButton(
+                        onPressed: () {},
+                        color: Colors.red,
+                        textColor: Colors.black,
+                        child: const Text("add text"))
+                  ],
+                )
+              ],
             ));
   }
 }
