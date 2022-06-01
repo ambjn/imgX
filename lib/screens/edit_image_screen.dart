@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:imgx/widgets/edit_image_view_model.dart';
 import 'package:imgx/widgets/image_text.dart';
+import 'package:screenshot/screenshot.dart';
 
 class EditImageScreen extends StatefulWidget {
   const EditImageScreen({Key? key, required this.selectedImage})
@@ -17,50 +18,55 @@ class _EditImageScreenState extends EditImageViewModel {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar,
-      body: SafeArea(
-          child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.3,
-        child: Stack(children: [
-          _selectedImage,
-          for (int i = 0; i < texts.length; i++)
-            Positioned(
-                left: texts[i].left,
-                top: texts[i].top,
-                child: GestureDetector(
-                  onLongPress: (() {
-                    print('long press');
-                  }),
-                  onTap: () {
-                    print('single press');
-                  },
-                  child: Draggable(
-                    feedback: ImageText(textInfo: texts[i]),
-                    child: ImageText(textInfo: texts[i]),
-                    onDragEnd: (drag) {
-                      final rendexBox = context.findRenderObject() as RenderBox;
-                      Offset off = rendexBox.globalToLocal(drag.offset);
+      body: Screenshot(
+        controller: screenshotController,
+        child: SafeArea(
+            child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.3,
+          child: Stack(children: [
+            _selectedImage,
+            for (int i = 0; i < texts.length; i++)
+              Positioned(
+                  left: texts[i].left,
+                  top: texts[i].top,
+                  child: GestureDetector(
+                    onLongPress: (() {
                       setState(() {
-                        texts[i].top = off.dy - 96; //to improve drag and drop
-                        texts[i].left = off.dx;
+                        currentIndex = i;
+                        removeText(context);
                       });
-                    },
-                  ),
-                )),
-          creatorText.text.isNotEmpty
-              ? Positioned(
-                  left: 0,
-                  bottom: 0,
-                  child: Text(
-                    creatorText.text,
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.3),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )
-              : const SizedBox.shrink()
-        ]),
-      )),
+                    }),
+                    onTap: () => setCurrentIndex(context, i),
+                    child: Draggable(
+                      feedback: ImageText(textInfo: texts[i]),
+                      child: ImageText(textInfo: texts[i]),
+                      onDragEnd: (drag) {
+                        final rendexBox =
+                            context.findRenderObject() as RenderBox;
+                        Offset off = rendexBox.globalToLocal(drag.offset);
+                        setState(() {
+                          texts[i].top = off.dy - 96; //to improve drag and drop
+                          texts[i].left = off.dx;
+                        });
+                      },
+                    ),
+                  )),
+            creatorText.text.isNotEmpty
+                ? Positioned(
+                    left: 0,
+                    bottom: 0,
+                    child: Text(
+                      creatorText.text,
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.3),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : const SizedBox.shrink()
+          ]),
+        )),
+      ),
       floatingActionButton: _addnewTextFab,
     );
   }
@@ -88,7 +94,7 @@ class _EditImageScreenState extends EditImageViewModel {
             scrollDirection: Axis.horizontal,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => saveToGallery(context),
                 icon: const Icon(
                   Icons.save,
                   color: Colors.black,
@@ -96,7 +102,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'save image',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: increaseFontSize,
                 icon: const Icon(
                   Icons.add,
                   color: Colors.black,
@@ -104,7 +110,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'increase font size',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: decreaseFontSize,
                 icon: const Icon(
                   Icons.remove,
                   color: Colors.black,
@@ -112,7 +118,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'decrease font size',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: alignLeft,
                 icon: const Icon(
                   Icons.format_align_left,
                   color: Colors.black,
@@ -120,7 +126,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'align left',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: alignCenter,
                 icon: const Icon(
                   Icons.format_align_center,
                   color: Colors.black,
@@ -128,7 +134,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'align center',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: alignRight,
                 icon: const Icon(
                   Icons.format_align_right,
                   color: Colors.black,
@@ -136,7 +142,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'align right',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: textBold,
                 icon: const Icon(
                   Icons.format_bold,
                   color: Colors.black,
@@ -144,7 +150,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'bold',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: textItalic,
                 icon: const Icon(
                   Icons.format_italic,
                   color: Colors.black,
@@ -152,7 +158,7 @@ class _EditImageScreenState extends EditImageViewModel {
                 tooltip: 'italic',
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => addLinesToText,
                 icon: const Icon(
                   Icons.space_bar,
                   color: Colors.black,

@@ -9,4 +9,5 @@ Future<bool> requestPermission(Permission permission) async {
       return true;
     }
   }
+  return false;
 }

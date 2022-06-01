@@ -1,15 +1,54 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:imgx/models/text_model.dart';
 import 'package:imgx/screens/edit_image_screen.dart';
+import 'package:imgx/utils/utils.dart';
 import 'package:imgx/widgets/default_button.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
 
 abstract class EditImageViewModel extends State<EditImageScreen> {
   TextEditingController textEditingController = TextEditingController();
   TextEditingController creatorText = TextEditingController();
-
+  ScreenshotController screenshotController = ScreenshotController();
   List<TextModel> texts = [];
 
   int currentIndex = 0;
+  saveToGallery(context) {
+    if (texts.isNotEmpty) {
+      screenshotController.capture().then((Uint8List? image) {
+        saveImage(image!);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+          'saved to gallery',
+          style: TextStyle(fontSize: 16),
+        )));
+      }).catchError((err) => print(err));
+    }
+  }
+
+  saveImage(Uint8List bytes) async {
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceAll('.', '-')
+        .replaceAll(':', '-');
+    final name = 'screenshot_$time';
+    await requestPermission(Permission.storage);
+    await ImageGallerySaver.saveImage(bytes, name: name);
+  }
+
+  removeText(context) {
+    setState(() {
+      texts.removeAt(currentIndex);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+      'deleted',
+      style: TextStyle(fontSize: 16),
+    )));
+  }
+
   setCurrentIndex(context, index) {
     setState(() {
       currentIndex = index;
@@ -29,13 +68,63 @@ abstract class EditImageViewModel extends State<EditImageScreen> {
 
   increaseFontSize() {
     setState(() {
-      texts[currentIndex].fontSize = texts[currentIndex].fontSize + 2;
+      texts[currentIndex].fontSize += 2;
     });
   }
 
   decreaseFontSize() {
     setState(() {
-      texts[currentIndex].fontSize = texts[currentIndex].fontSize - 2;
+      texts[currentIndex].fontSize -= 2;
+    });
+  }
+
+  alignLeft() {
+    setState(() {
+      texts[currentIndex].textAlign = TextAlign.left;
+    });
+  }
+
+  alignCenter() {
+    setState(() {
+      texts[currentIndex].textAlign = TextAlign.center;
+    });
+  }
+
+  alignRight() {
+    setState(() {
+      texts[currentIndex].textAlign = TextAlign.right;
+    });
+  }
+
+  textBold() {
+    setState(() {
+      if (texts[currentIndex].fontWeight == FontWeight.bold) {
+        texts[currentIndex].fontWeight = FontWeight.normal;
+      } else {
+        texts[currentIndex].fontWeight = FontWeight.bold;
+      }
+    });
+  }
+
+  textItalic() {
+    setState(() {
+      if (texts[currentIndex].fontStyle == FontStyle.italic) {
+        texts[currentIndex].fontStyle = FontStyle.normal;
+      } else {
+        texts[currentIndex].fontStyle = FontStyle.italic;
+      }
+    });
+  }
+
+  addLinesToText() {
+    setState(() {
+      if (texts[currentIndex].text.contains('\n')) {
+        texts[currentIndex].text =
+            texts[currentIndex].text.replaceAll('\n', ' ');
+      } else {
+        texts[currentIndex].text =
+            texts[currentIndex].text.replaceAll(' ', '\n');
+      }
     });
   }
 
