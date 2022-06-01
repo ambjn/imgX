@@ -2,7 +2,7 @@
 
 ## About:
 
-imgX is an image editing app by made using Flutter.
+imgX is an image editing app made by using Flutter. <br>
 More editing options would be added soon :)
 
 ## Packages:
