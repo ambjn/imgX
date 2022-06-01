@@ -21,8 +21,7 @@ class HomeScreen extends StatelessWidget {
           );
           if (image != null) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    EditImageScreen(selectedImage: image.path)));
+                builder: (_) => EditImageScreen(selectedImage: image.path)));
           }
         },
       )),
