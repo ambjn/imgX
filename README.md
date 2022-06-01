@@ -26,7 +26,6 @@ In the command terminal, run the following commands:
 ## Screenshots:
 
 <center> 
+<img src = 'https://raw.githubusercontent.com/ambjn/imgX/master/lib/screenshots/2.png' alt='screenshot-of-app'>
 <img src = 'https://raw.githubusercontent.com/ambjn/imgX/master/lib/screenshots/1.png' alt='screenshot-of-app'> 
-<!-- <img src = screenshots/1.png alt='screenshot-of-app'> -->
-    
 </center>
