@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'imgX',
       theme: ThemeData.light(),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
