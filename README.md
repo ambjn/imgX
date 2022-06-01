@@ -3,6 +3,7 @@
 ## About:
 
 imgX is an image editing app made by using Flutter. <br>
+Edit your image and save it into gallery, could be used as a quick meme generator app too 8)
 More editing options would be added soon :)
 
 ## Packages:
